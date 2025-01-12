@@ -1,0 +1,99 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Task {
+    int id;
+    string description;
+    bool completed;
+
+    Task(int id, const string& description)
+        : id(id), description(description), completed(false) {}
+};
+void addTask(vector<Task>& tasks, const string& description) {
+    int id = tasks.size() + 1;
+    tasks.emplace_back(id, description);
+    cout << "Task added successfully!\n";
+}
+void viewTasks(const vector<Task>& tasks) {
+    if (tasks.empty()) {
+        cout << "No tasks available.\n";
+        return;
+    }
+    for (const auto& task : tasks) {
+        cout << "ID: " << task.id << ", Description: " << task.description
+             << ", Status: " << (task.completed ? "Completed" : "Pending") << "\n";
+    }
+}
+void markTaskCompleted(vector<Task>& tasks, int taskId) {
+    for (auto& task : tasks) {
+        if (task.id == taskId) {
+            task.completed = true;
+            cout << "Task marked as completed!\n";
+            return;
+        }
+    }
+    cout << "Task not found.\n";
+}
+void markTaskCompleted(vector<Task>& tasks, int taskId) {
+    for (auto& task : tasks) {
+        if (task.id == taskId) {
+            task.completed = true;
+            cout << "Task marked as completed!\n";
+            return;
+        }
+    }
+    cout << "Task not found.\n";
+}
+void removeTask(vector<Task>& tasks, int taskId) {
+    for (auto it = tasks.begin(); it != tasks.end(); ++it) {
+        if (it->id == taskId) {
+            tasks.erase(it);
+            cout << "Task removed successfully!\n";
+            return;
+        }
+    }
+    cout << "Task not found.\n";
+}
+int main() {
+    vector<Task> tasks;
+    string command;
+
+    while (true) {
+        cout << "\nEnter command (add, view, complete, remove, exit): ";
+        cin >> command;
+
+        if (command == "add") {
+            string description;
+            cout << "Enter task description: ";
+            cin.ignore();
+            getline(cin, description);
+            addTask(tasks, description);
+
+        } else if (command == "view") {
+            viewTasks(tasks);
+
+        } else if (command == "complete") {
+            int taskId;
+            cout << "Enter task ID to mark as completed: ";
+            cin >> taskId;
+            markTaskCompleted(tasks, taskId);
+
+        } else if (command == "remove") {
+            int taskId;
+            cout << "Enter task ID to remove: ";
+            cin >> taskId;
+            removeTask(tasks, taskId);
+
+        } else if (command == "exit") {
+            break;
+
+        } else {
+            cout << "Invalid command.\n";
+        }
+    }
+
+    return 0;
+}
