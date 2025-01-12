@@ -1,0 +1,104 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Book class
+class Book {
+public:
+    int id;
+    string title;
+    string author;
+    bool isIssued;
+
+    Book(int id, string title, string author)
+        : id(id), title(title), author(author), isIssued(false) {}
+
+    void display() {
+        cout << "Book ID: " << id << ", Title: " << title << ", Author: " << author << ", Issued: " << (isIssued ? "Yes" : "No") << endl;
+    }
+};
+
+// Member class
+class Member {
+public:
+    int id;
+    string name;
+
+    Member(int id, string name) : id(id), name(name) {}
+
+    void display() {
+        cout << "Member ID: " << id << ", Name: " << name << endl;
+    }
+};
+
+// Library class
+class Library {
+private:
+    vector<Book> books;
+    vector<Member> members;
+
+public:
+    void addBook(Book book) {
+        books.push_back(book);
+    }
+
+    void addMember(Member member) {
+        members.push_back(member);
+    }
+
+    void issueBook(int bookId, int memberId) {
+        for (Book &book : books) {
+            if (book.id == bookId && !book.isIssued) {
+                book.isIssued = true;
+                cout << "Book issued to member ID " << memberId << endl;
+                return;
+            }
+        }
+        cout << "Book not available for issuing." << endl;
+    }
+
+    void returnBook(int bookId) {
+        for (Book &book : books) {
+            if (book.id == bookId && book.isIssued) {
+                book.isIssued = false;
+                cout << "Book returned." << endl;
+                return;
+            }
+        }
+        cout << "Book not found." << endl;
+    }
+
+    void displayBooks() {
+        for (Book &book : books) {
+            book.display();
+        }
+    }
+
+    void displayMembers() {
+        for (Member &member : members) {
+            member.display();
+        }
+    }
+};
+
+int main() {
+    Library library;
+
+    library.addBook(Book(1, "C++ Programming", "Bjarne Stroustrup"));
+    library.addBook(Book(2, "Effective C++", "Scott Meyers"));
+    library.addMember(Member(1, "Alice"));
+    library.addMember(Member(2, "Bob"));
+
+    library.displayBooks();
+    library.displayMembers();
+
+    library.issueBook(1, 1);
+    library.displayBooks();
+
+    library.returnBook(1);
+    library.displayBooks();
+
+    return 0;
+}
