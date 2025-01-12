@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+
+char board[3][3];
+char current_marker;
+char current_player;
+
+void resetBoard() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            board[i][j] = ' ';
+        }
+    }
+}
+
+void printBoard() {
+    std::cout << " " << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << "\n";
+    std::cout << "---|---|---\n";
+    std::cout << " " << board[1][0] << " | " << board[1][1] << " | " << board[1][2] << "\n";
+    std::cout << "---|---|---\n";
+    std::cout << " " << board[2][0] << " | " << board[2][1] << " | " << board[2][2] << "\n";
+}
+
+bool placeMarker(int row, int col) {
+    if (board[row][col] != ' ') return false;
+    board[row][col] = current_marker;
+    return true;
+}
+
+bool checkWinner() {
+    // Rows
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') return true;
+    }
+    // Columns
+    for (int i = 0; i < 3; i++) {
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') return true;
+    }
+    // Diagonals
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ') return true;
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != ' ') return true;
+    
+    return false;
+}
+
+void switchPlayer() {
+    current_marker = (current_marker == 'X') ? 'O' : 'X';
+    current_player = (current_player == '1') ? '2' : '1';
+}
+
+void game() {
+    resetBoard();
+    current_player = '1';
+    current_marker = 'X';
+    printBoard();
+    
+    for (int i = 0; i < 9; i++) {
+        std::cout << "Player " << current_player << "'s turn. Enter your position (row and column): ";
+        int row, col;
+        std::cin >> row >> col;
+        
+        if (placeMarker(row, col)) {
+            printBoard();
+            if (checkWinner()) {
+                std::cout << "Player " << current_player << " wins!\n";
+                return;
+            }
+            switchPlayer();
+        } else {
+            std::cout << "Invalid position. Try again.\n";
+            i--;
+        }
+    }
+    
+    std::cout << "It's a draw!\n";
+}
+
+int main() {
+    std::cout << "Tic-Tac-Toe Game\n";
+    game();
+    return 0;
+}
